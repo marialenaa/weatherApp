@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+   <script src="https://kit.fontawesome.com/4f86336575.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+      <!-- HEADER -->
+    <nav class=" header navbar navbar-light bg-dark">
+        Weather App
+       <a class="logout" href="/users/logout">Deconnexion</a>
+    </nav> 
+    
+    <!-- GRID -->
+    <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-lg-6 offset-lg-6" style="padding:0">
+          <form method="POST" action="/addcity">
+             <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Entre une nouvelle ville ici" aria-label="Recipient's username" value="" name="cityFront" aria-describedby="button-addon2">
+                 <div class="input-group-append">
+                  <button role="button" class="btn btn-outline-success" type="submit" id="button-addon2" name="validé">Add</button></a>
+                </div>
+              </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-lg-6" >
+          <div id="mapid"></div>
+        </div>
+        <!-- div des ville en DBB -->
+        <div class="col-xs-12 col-lg-6 ">
+            <a href="/update" style="padding:0" id="refresh" class="btn btn-link">Refresh meteo <i class="fas fa-sync-alt"></i></a>
+            <ul  class="list-group row" style="display: flex;"> 
+              <%if(cityList.length == 0) {%>
+                <span class="badge badge-pill badge-danger">La liste est vide</span>
+              <%}else{
+              for(var i=0; i<cityList.length;i++){ %>
+                <li class="lonlat list-group-item" data-name="<%=cityList[i].name%>" data-lon="<%=cityList[i].lon%>" data-lat="<%=cityList[i].lat%>">
+                  <span class="villecss"><%=cityList[i].name%></span> 
+                    <span><%=cityList[i].desc%></span> 
+                    <img src="<%=cityList[i].url%>" class="img-fluid" alt="Responsive image">
+                    <span class="badge badge-pill badge-primary"><%=cityList[i].tempmin%>°C</span>
+                    <span class="badge badge-pill badge-danger"><%=cityList[i].tempmax%>°c</span>
+                  <a href="/deletecity?id=<%=cityList[i].id%>"><i class="fas fa-poo fa-3x"></i></a> 
+                </li> 
+                <%}}%>
+           </ul>
+        </div>
+
+        // nouvelle div de la liste en session "FAVORIS"
+        <div class="col-xs-12 col-lg-6 ">
+            <a href="/update" style="padding:0" id="refresh" class="btn btn-link">Refresh meteo <i class="fas fa-sync-alt"></i></a>
+            <ul  class="list-group row" style="display: flex;"> 
+              <%if(mycities.length == 0) {%>
+                <span class="badge badge-pill badge-danger">La liste FAVORIS est vide</span>
+              <%}else{
+              for(var i=0; i<mycities.length;i++){ %>
+                <li class="lonlat list-group-item" data-name="<%=mycities[i].name%>" data-lon="<%=mycities[i].lon%>" data-lat="<%=mycities[i].lat%>">
+                  <span class="villecss"><%=mycities[i].name%></span> 
+                    <span><%=mycities[i].desc%></span> 
+                    <img src="<%=mycities[i].url%>" class="img-fluid" alt="Responsive image">
+                    <span class="badge badge-pill badge-primary"><%=mycities[i].tempmin%>°C</span>
+                    <span class="badge badge-pill badge-danger"><%=mycities[i].tempmax%>°c</span>
+                  <a href="/deletecity?id=<%=mycities[i].id%>"><i class="fas fa-poo fa-3x"></i></a> 
+                </li> 
+                <%}}%>
+           </ul>
+        </div>
+    </div>
+    </div>
+    
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="/javascripts/script.js"></script>
+  </body>
+</html>
